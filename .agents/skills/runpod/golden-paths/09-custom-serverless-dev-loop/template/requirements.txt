@@ -1,0 +1,9 @@
+# torch/CUDA come from the runpod/pytorch base image — don't reinstall them here.
+# NOTE: the Dockerfile installs these in two steps (faster-whisper, then
+# `--ignore-installed cryptography runpod`) because `runpod` pulls a newer
+# cryptography than the base's Debian-managed one, which pip can't uninstall.
+# On a pod, install the same way:
+#   pip install --break-system-packages faster-whisper
+#   pip install --break-system-packages --ignore-installed cryptography runpod
+runpod
+faster-whisper

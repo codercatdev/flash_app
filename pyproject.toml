@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flash_app"
+version = "0.1.0"
+description = "Runpod Flash Serverless Application"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = ["runpod-flash"]
+
+# This is an application, not a library: nothing here should be packaged.
+# Without this, setuptools' flat-layout auto-discovery errors on the
+# multiple top-level worker modules (gpu_worker, lb_worker, cpu_worker).
+[tool.setuptools]
+py-modules = []
