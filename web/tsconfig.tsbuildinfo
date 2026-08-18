@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/auth-client.ts","./src/main.tsx","./worker/auth-cli.ts","./worker/auth.ts","./worker/env.d.ts","./worker/index.ts","./worker/runpod.ts","./worker/tokens.ts","./worker/types.ts","./worker/routes/generate.ts","./worker/routes/images.ts","./worker-configuration.d.ts","./vite.config.ts"],"version":"5.9.3"}

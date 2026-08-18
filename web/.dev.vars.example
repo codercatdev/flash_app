@@ -1,0 +1,21 @@
+# Copy to web/.dev.vars for local `vite dev`. Never commit .dev.vars.
+# In production these are set with: wrangler secret put <NAME>
+
+# Runpod: the endpoint that `flash deploy` created. Get the id from the deploy
+# output or `flash app get flashfun-sdxl`. The API key comes from
+# https://www.runpod.io/console/user/settings
+RUNPOD_API_KEY=
+RUNPOD_ENDPOINT_ID=
+
+# Stripe test mode. The webhook secret is printed by `stripe listen`.
+STRIPE_SECRET_KEY=sk_test_
+STRIPE_WEBHOOK_SECRET=whsec_
+
+# Any long random string: openssl rand -base64 32
+BETTER_AUTH_SECRET=
+
+# Local override of the wrangler.jsonc var (production is https://flashfun.dev).
+APP_URL=http://localhost:5173
+
+# Sandbox price id (wrangler.jsonc holds the live one).
+STRIPE_PRO_PRICE_ID=price_

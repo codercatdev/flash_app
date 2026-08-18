@@ -38,7 +38,24 @@ wheels/
 # Flash
 .flash/
 
+# Flash scans the project using .gitignore patterns (.flashignore was removed in
+# v1.4). Without these, the vendored skill fixtures under .agents/ and .claude/
+# are discovered as real endpoints and generate phantom routes. See
+# docs/friction-log.md.
+.agents/
+.claude/
+skills-lock.json
+
+# Cloudflare / Node
+node_modules/
+.wrangler/
+.dev.vars
+dist/
+.output/
+
 # OS
 .DS_Store
 Thumbs.db
 
+# Notes
+docs/

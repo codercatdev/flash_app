@@ -1,0 +1,280 @@
+:root {
+  --bg: #0b0d12;
+  --panel: #141822;
+  --panel-2: #1b2130;
+  --border: #262d3d;
+  --text: #e8ecf4;
+  --muted: #8b95ab;
+  --accent: #6ea8ff;
+  --accent-2: #b46cff;
+  --warm: #34d399;
+  --cold: #fbbf24;
+  --danger: #f87171;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1100px 500px at 15% -10%, #1b2440 0%, transparent 60%),
+    radial-gradient(900px 450px at 90% 0%, #2a1740 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+.shell {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.loading {
+  color: var(--muted);
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 5vw, 44px);
+  letter-spacing: -0.02em;
+  background: linear-gradient(92deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.auth {
+  max-width: 420px;
+}
+
+.auth h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+
+input,
+textarea {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text);
+  padding: 10px 12px;
+  font: inherit;
+  width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+input[type="range"] {
+  width: 130px;
+  padding: 0;
+}
+
+button {
+  background: linear-gradient(92deg, var(--accent), var(--accent-2));
+  border: 0;
+  border-radius: 9px;
+  color: #0a0c11;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  padding: 10px 16px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+button.link {
+  background: none;
+  color: var(--accent);
+  font-weight: 500;
+  padding: 4px 0;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tokens {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+.tokens.empty {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.status {
+  color: var(--accent);
+  margin: 12px 0 0;
+}
+
+.error {
+  color: var(--danger);
+  margin: 10px 0 0;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.tile {
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tile img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 9px;
+  display: block;
+  background: var(--panel-2);
+}
+
+.tile figcaption p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11.5px;
+  font-weight: 650;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.badge.gpu {
+  color: var(--accent);
+}
+
+.badge.warm {
+  color: var(--warm);
+}
+
+.badge.cold {
+  color: var(--cold);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 12, 0.7);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.modal {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.modal h2 {
+  margin: 0;
+  font-size: 20px;
+}

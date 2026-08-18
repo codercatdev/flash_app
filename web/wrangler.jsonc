@@ -1,0 +1,46 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "flashfun",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-08-17",
+  // better-auth and the Stripe SDK both reach for node builtins (crypto, buffer).
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    // Unmatched paths fall through to index.html so the React router works on
+    // a hard refresh. API and image routes must hit the Worker first.
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/i/*"],
+    // Exposes env.ASSETS so the Worker's notFound handler can serve the SPA.
+    "binding": "ASSETS"
+  },
+  // Serve on the apex domain. `custom_domain: true` makes Cloudflare create the
+  // DNS record and cert automatically -- requires flashfun.dev to be a zone on
+  // this account. APP_URL below must match this origin exactly.
+  "routes": [{ "pattern": "flashfun.dev", "custom_domain": true }],
+
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "flashfun",
+      // Created with `wrangler d1 create flashfun`.
+      "database_id": "89516786-257b-4c71-a617-d6895e4bfcee",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "flashfun-images"
+    }
+  ],
+  "vars": {
+    // Overridden per-environment. Must match the origin the browser uses, or
+    // better-auth will reject the callback as an untrusted origin.
+    "APP_URL": "https://flashfun.dev",
+    "STRIPE_PRO_PRICE_ID": "price_1U5biPBMFjkFv6eAdUJQG92Z"
+  }
+  // Secrets (never in this file): RUNPOD_API_KEY, RUNPOD_ENDPOINT_ID,
+  // STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, BETTER_AUTH_SECRET.
+  // Set with `wrangler secret put <NAME>`; locally use web/.dev.vars.
+}
