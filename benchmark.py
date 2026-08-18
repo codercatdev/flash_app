@@ -25,12 +25,17 @@ import statistics
 import time
 
 
-async def _run_once(endpoint, prompt: str, steps: int, seed: int) -> dict:
+async def _run_once(endpoint, prompt: str, steps: int, seed: int, size: int) -> dict:
     started = time.perf_counter()
-    job = await endpoint.runsync(
-        {"prompt": prompt, "steps": steps, "seed": seed, "width": 512, "height": 512},
-        timeout=900,
+
+    # run() + wait(), NOT runsync(). runsync is capped server-side at ~60s no matter
+    # what client timeout you pass, and on a cold start it returns a job whose
+    # `output` is None rather than raising -- so a 34GB model download looks like a
+    # malformed worker response. This cost an hour of debugging a working endpoint.
+    job = await endpoint.run(
+        {"prompt": prompt, "steps": steps, "seed": seed, "width": size, "height": size}
     )
+    await job.wait(timeout=1800)
     wall_ms = round((time.perf_counter() - started) * 1000)
 
     output = getattr(job, "output", job)
@@ -70,6 +75,8 @@ async def main() -> None:
     )
     parser.add_argument("--runs", type=int, default=10)
     parser.add_argument("--steps", type=int, default=2)
+    parser.add_argument("--size", type=int, default=512,
+                        help="square resolution (512 for SDXL-Turbo, 1024 for FLUX)")
     parser.add_argument(
         "--prompt", default="a lighthouse in a storm, dramatic lighting"
     )
@@ -87,7 +94,7 @@ async def main() -> None:
     results: list[dict] = []
     for i in range(args.runs):
         try:
-            result = await _run_once(endpoint, f"{args.prompt} #{i}", args.steps, i)
+            result = await _run_once(endpoint, f"{args.prompt} #{i}", args.steps, i, args.size)
         except Exception as exc:  # keep going; a single failure shouldn't kill the run
             print(f"  run {i + 1:>2}  FAILED  {exc}")
             continue

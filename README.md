@@ -1,19 +1,25 @@
 # Flash Image Studio
 
-A real, deployed product built on **Runpod Flash**: sign up, spend tokens, generate
-images on a serverless GPU, hit a paywall, subscribe, keep going.
+A real, deployed product built on **Runpod Flash**: sign up, spend tokens, run two
+text-to-image models head to head, pick a winner blind, hit a paywall, subscribe.
 
-There is **no Dockerfile in this repository**. The GPU worker is a decorated Python
-class; Flash packages and provisions it.
+There is **no Dockerfile in this repository**. Both GPU workers are decorated Python
+classes; Flash packages and provisions them.
 
 ```
-Browser ──► Cloudflare Worker ──────────────► Runpod Flash endpoint
-            (Hono + React SPA)                (SDXL-Turbo, 24GB-tier GPU)
-              │                                        │
-              ├─ Better Auth ──► D1 (SQLite)           │
-              ├─ Stripe ───────► subscription + tokens │
-              └─ R2 ◄────────── generated PNGs ◄───────┘
+                                    ┌─► flashfun-sdxl   SDXL-Turbo   24GB  2 steps
+Browser ──► Cloudflare Worker ──────┤
+            (Hono + React SPA)      └─► flashfun-flux   FLUX.1-schnell 48GB 4 steps
+              │
+              ├─ Better Auth ──► D1 (SQLite) · users, tokens, battles, votes
+              ├─ Stripe ───────► subscription + token grants
+              └─ R2 ◄────────── generated PNGs
 ```
+
+Every prompt fans out to **both** endpoints concurrently. The two images come back
+into placeholder slots as each model finishes, and you pick the one you prefer
+**without being told which model made it** — the API withholds model identity until
+the vote is recorded, so the scoreboard measures output rather than brand.
 
 **Stack:** Runpod Flash · SDXL-Turbo · Cloudflare Workers · Hono · React · D1 · R2 ·
 Better Auth · Stripe
@@ -238,12 +244,20 @@ Flow: 5 free tokens at signup → 1 token per image → `402` with an upgrade UR
 
 | Method | Path | Purpose |
 |---|---|---|
-| `POST` | `/api/generate` | Spend a token, dispatch to Runpod. `402` when broke |
-| `GET` | `/api/generate/:id` | Poll; persists to R2 and settles the ledger |
-| `GET` | `/api/generations` | Gallery |
+| `POST` | `/api/generate` | Spend 1 token, dispatch to **both** models. `402` when broke |
+| `GET` | `/api/battle/:id` | Poll both sides; persists to R2. **No model names until voted** |
+| `POST` | `/api/battle/:id/vote` | Record the pick and reveal which model was which |
+| `GET` | `/api/leaderboard` | Wins and win-rate per model |
+| `GET` | `/api/picks` | Images this user picked |
+| `GET` | `/api/feed` | Global feed across all users (voted battles only) |
 | `GET` | `/api/me` | Session, balance, subscription |
 | `*` | `/api/auth/*` | Better Auth (incl. Stripe webhook) |
 | `GET` | `/i/:key` | Serve a PNG from R2 |
+
+**Blindness is server-side.** `/api/battle/:id` omits model identity entirely until
+`status = VOTED`; hiding labels only in the UI would still ship them in the JSON. The
+global feed is restricted to *voted* battles for the same reason — an unvoted battle
+in the feed would appear labelled and spoil the comparison for whoever is deciding.
 
 Generation is submit-then-poll rather than one blocking call, because Flash's
 `runsync` gives up at 60s and a cold start can take three minutes. It also lets the

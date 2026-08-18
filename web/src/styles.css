@@ -278,3 +278,206 @@ button.link {
   margin: 0;
   font-size: 20px;
 }
+
+/* ---------- tabs ---------- */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 5px;
+}
+
+.tab {
+  background: none;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 8px;
+}
+
+.tab.active {
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.notice {
+  margin: 0;
+  font-size: 13px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 34px 18px;
+}
+
+/* ---------- leaderboard ---------- */
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leaderboard.empty {
+  padding: 14px 18px;
+}
+
+.leaderboard-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 2fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.score-label .muted {
+  font-size: 11.5px;
+}
+
+.meter {
+  height: 8px;
+  background: var(--panel-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.meter-fill.sdxl-turbo { background: var(--accent); }
+.meter-fill.flux-schnell { background: var(--accent-2); }
+
+.score-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  font-size: 13px;
+  min-width: 66px;
+  text-align: right;
+}
+
+/* ---------- arena ---------- */
+
+.ask {
+  margin: 4px 0 0;
+  font-size: 19px;
+  text-align: center;
+}
+
+.arena {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .arena { grid-template-columns: 1fr; }
+  .score-row { grid-template-columns: 1fr; gap: 6px; }
+  .score-num { text-align: left; }
+}
+
+.side {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s ease;
+}
+
+.side.winner {
+  border-color: var(--warm);
+}
+
+.side-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  font-weight: 700;
+}
+
+/* Fixed-ratio box so the layout never jumps when one model finishes first --
+   and they always finish at different times. */
+.slot {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: var(--panel-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.slot-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding: 16px;
+  text-align: center;
+}
+
+.slot-msg.error {
+  color: var(--danger);
+}
+
+.spinner {
+  width: 26px;
+  height: 26px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2.4s; }
+}
+
+.vote {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.badge.model.sdxl-turbo { color: var(--accent); }
+.badge.model.flux-schnell { color: var(--accent-2); }

@@ -65,9 +65,10 @@ function headers(env: Env) {
  */
 export async function submitJob(
   env: Env,
+  endpointId: string,
   input: GenerateInput,
 ): Promise<string> {
-  const res = await fetch(`${RUNPOD_BASE}/${env.RUNPOD_ENDPOINT_ID}/run`, {
+  const res = await fetch(`${RUNPOD_BASE}/${endpointId}/run`, {
     method: "POST",
     headers: headers(env),
     body: JSON.stringify({ input }),
@@ -86,10 +87,11 @@ export async function submitJob(
 
 export async function fetchJobState(
   env: Env,
+  endpointId: string,
   runpodJobId: string,
 ): Promise<JobState> {
   const res = await fetch(
-    `${RUNPOD_BASE}/${env.RUNPOD_ENDPOINT_ID}/status/${runpodJobId}`,
+    `${RUNPOD_BASE}/${endpointId}/status/${runpodJobId}`,
     { headers: headers(env) },
   );
 

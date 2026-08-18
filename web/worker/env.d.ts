@@ -10,6 +10,7 @@ declare global {
   interface Env {
     RUNPOD_API_KEY: string;
     RUNPOD_ENDPOINT_ID: string;
+    RUNPOD_FLUX_ENDPOINT_ID: string;
     STRIPE_SECRET_KEY: string;
     STRIPE_WEBHOOK_SECRET: string;
     BETTER_AUTH_SECRET: string;

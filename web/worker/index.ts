@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
 import { createAuth } from "./auth";
-import generate from "./routes/generate";
+import arena from "./routes/arena";
 import images from "./routes/images";
 import { FREE_SIGNUP_TOKENS, PLAN_TOKENS, getBalance } from "./tokens";
 import type { AppContext } from "./types";
@@ -67,7 +67,7 @@ app.get("/api/me", async (c) => {
   });
 });
 
-app.route("/", generate);
+app.route("/", arena);
 app.route("/", images);
 
 app.get("/api/health", (c) => c.json({ status: "ok" }));
